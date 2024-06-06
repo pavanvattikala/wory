@@ -1,6 +1,6 @@
 ## Endpoints
 
-The base URL for all endpoints is: `https://api.example.com`
+The base URL for all endpoints is: `localhost:5000/api`
 
 ### Authentication
 
