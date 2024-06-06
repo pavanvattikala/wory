@@ -72,10 +72,13 @@ router.delete(
 router.put("/project/:id", auth(["Client"]), async (req: AuthRequest, res) => {
   const { id } = req.params;
   const { title, description, tags } = req.body as IProject;
+
+  const tagIds = await addTagsIfNotExist(tags)(req, res);
+
   try {
     const project = await Project.findByIdAndUpdate(
       id,
-      { title, description, tags },
+      { title, description, tags: tagIds },
       { new: true }
     );
     res.json(project);
