@@ -52,4 +52,41 @@ router.post(
     }
   }
 );
+
+router.get(
+  "/projects",
+  auth(["Client", "Freelancer"]),
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const projects = await Project.find().populate("tags");
+      res.json(projects);
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error });
+    }
+  }
+);
+
+router.delete(
+  "/project/:id",
+  auth(["Client"]),
+  async (req: AuthRequest, res: Response) => {
+    const { id } = req.params;
+
+    // authorize the client
+    const project = await Project.findById(id);
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+    if (project.client.toString() !== req.user?.id) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+    try {
+      await Project.findByIdAndDelete(id);
+      res.json({ message: "Project removed" });
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error });
+    }
+  }
+);
+
 export default router;
