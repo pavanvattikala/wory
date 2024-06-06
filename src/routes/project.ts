@@ -87,4 +87,32 @@ router.put("/project/:id", auth(["Client"]), async (req: AuthRequest, res) => {
   }
 });
 
+router.get(
+  "/projects/tags",
+  auth(["Client", "Freelancer"]),
+  async (req: Request, res: Response) => {
+    const { tags } = req.query;
+
+    // tags are speared by commas
+    if (!tags) return res.status(400).json({ message: "Tags are required" });
+
+    // split the tags by commas and add ids to the array
+    const tagsArray = (tags as string).split(",");
+
+    // find tag ids from the database
+    const tagIds = await ProjectTag.find({ name: { $in: tagsArray } });
+
+    try {
+      // Find projects that have at least one of the provided tags
+      const projects = await Project.find({
+        tags: { $in: tagIds },
+      }).populate("tags");
+
+      res.json(projects);
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error });
+    }
+  }
+);
+
 export default router;
