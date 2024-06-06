@@ -1,6 +1,9 @@
+## Purpose
+this app is deployed as hiring part of MaMo TechnoLabs LLP 
+
 ## Endpoints
 
-The base URL for all endpoints is: `localhost:5000/api`
+The base URL for all endpoints is: [https://wory.onrender.com/api](https://wory.onrender.com/api)
 
 ### Authentication
 
