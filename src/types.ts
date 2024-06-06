@@ -1,4 +1,5 @@
 import { Document, Types } from "mongoose";
+import { Request } from "express";
 
 // user Type
 export interface IUser extends Document {
@@ -25,4 +26,9 @@ export interface IProject extends Document {
 // project tag Type
 export interface IProjectTag extends Document {
   name: string;
+}
+
+// Auth Request Type
+export interface AuthRequest extends Request {
+  user?: IUser;
 }
